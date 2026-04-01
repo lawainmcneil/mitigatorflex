@@ -689,6 +689,11 @@
         <canvas id="aggressiveChart"></canvas>
       </div>
 
+      <div class="chart-container">
+        <div class="chart-title">Aggressive Sleeve vs. RMF Balanced vs. Vanguard 60/40</div>
+        <canvas id="aggVsBalVs60Chart"></canvas>
+      </div>
+
       <div class="takeaway">
         <div class="takeaway-label">Key Takeaway</div>
         <p>The Aggressive strategy outperforms Balanced on every return horizon, including a $11,600 edge at May 2010 from heavier equity exposure purchased near the trough — supercharged by DFA Emerging Markets returning +83.6% in 2009 alone. Through Dec 2025 it leads VT (<strong>+405% vs +257%</strong>) with the critical distinction that all equity was acquired at a 40%+ discount to the prior peak.</p>
@@ -700,7 +705,7 @@
       <p class="section-intro" style="margin-bottom:32px">A direct comparison of the two RMF profiles across every measured dimension — from capital protection to long-term growth.</p>
 
       <div class="chart-container">
-        <div class="chart-title">Cumulative Return Through Dec 2025</div>
+        <div class="chart-title">Aggressive vs. Balanced vs. 60/40 — Cumulative Return Through Dec 2025</div>
         <canvas id="compareChart"></canvas>
       </div>
 
@@ -929,12 +934,20 @@ new Chart(document.getElementById('aggressiveChart'), {
   }
 });
 
-// ── Head-to-Head Comparison Chart ──
+// ── Head-to-Head Comparison Chart (with 60/40) ──
 new Chart(document.getElementById('compareChart'), {
   type: 'bar',
   data: {
     labels: ['May 2010', '3-Year', '5-Year', '10-Year', '~18-Year (Dec 2025)'],
     datasets: [
+      {
+        label: 'RMF Aggressive',
+        data: [22.4, 35.7, 49.1, 125.9, 405],
+        backgroundColor: 'rgba(52,211,153,0.8)',
+        borderColor: '#34D399',
+        borderWidth: 1,
+        borderRadius: 3
+      },
       {
         label: 'RMF Balanced',
         data: [10.8, 19.0, 29.0, 80.0, 251],
@@ -944,10 +957,10 @@ new Chart(document.getElementById('compareChart'), {
         borderRadius: 3
       },
       {
-        label: 'RMF Aggressive',
-        data: [22.4, 35.7, 49.1, 125.9, 405],
-        backgroundColor: 'rgba(52,211,153,0.7)',
-        borderColor: '#34D399',
+        label: 'Vanguard 60/40 (VBIAX)',
+        data: [5.2, 5.2, 24.1, 95.7, 262],
+        backgroundColor: 'rgba(96,165,250,0.6)',
+        borderColor: '#60A5FA',
         borderWidth: 1,
         borderRadius: 3
       }
@@ -967,7 +980,90 @@ new Chart(document.getElementById('compareChart'), {
       legend: { labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 16, font: { size: 11 } } },
       tooltip: {
         backgroundColor: '#1A2332', borderColor: '#2A3A50', borderWidth: 1,
-        callbacks: { label: ctx => ` ${ctx.dataset.label}: +${ctx.parsed.y}%` }
+        callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y > 0 ? '+' : ''}${ctx.parsed.y}%` }
+      }
+    }
+  }
+});
+
+// ── Aggressive Sleeve vs. RMF Balanced vs. 60/40 (Line Chart) ──
+new Chart(document.getElementById('aggVsBalVs60Chart'), {
+  type: 'line',
+  data: {
+    labels: ['Start\n(Dec 2007)', 'Step 1\n(Jan 2008)', 'Step 2\n(Oct 7 2008)', 'Step 3\n(Oct 24 2008)', 'Trough\n(Mar 2009)', 'May 2010', '3-Year\n(Dec 2010)', '5-Year\n(Dec 2012)', '10-Year\n(Dec 2017)', '~18-Year\n(Dec 2025)'],
+    datasets: [
+      {
+        label: 'RMF Aggressive',
+        data: [100000, 99700, 83300, 73500, 65300, 122400, 135700, 149100, 225900, 505000],
+        borderColor: '#34D399',
+        backgroundColor: 'rgba(52,211,153,0.1)',
+        borderWidth: 2.5,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        pointBackgroundColor: '#34D399',
+        pointBorderColor: '#0B1120',
+        pointBorderWidth: 2,
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'RMF Balanced',
+        data: [100000, 99700, 88700, 82200, 77300, 110800, 119000, 129000, 180000, 350600],
+        borderColor: '#C9A84C',
+        backgroundColor: 'rgba(201,168,76,0.08)',
+        borderWidth: 2.5,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        pointBackgroundColor: '#C9A84C',
+        pointBorderColor: '#0B1120',
+        pointBorderWidth: 2,
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'Vanguard 60/40 (VBIAX)',
+        data: [100000, 96000, 78000, 72000, 70000, 100000, 105200, 124100, 195700, 362000],
+        borderColor: '#60A5FA',
+        backgroundColor: 'rgba(96,165,250,0.06)',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: '#60A5FA',
+        pointBorderColor: '#0B1120',
+        pointBorderWidth: 2,
+        borderDash: [6, 3],
+        fill: false,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { size: 10 }, maxRotation: 45 }
+      },
+      y: {
+        grid: { color: gridColor },
+        ticks: {
+          callback: v => '$' + (v / 1000).toFixed(0) + 'K',
+          font: { size: 11 }
+        }
+      }
+    },
+    plugins: {
+      legend: { labels: { usePointStyle: true, pointStyle: 'circle', padding: 16, font: { size: 11 } } },
+      tooltip: {
+        backgroundColor: '#1A2332', borderColor: '#2A3A50', borderWidth: 1,
+        callbacks: {
+          label: ctx => {
+            const val = ctx.parsed.y;
+            const pct = ((val - 100000) / 100000 * 100).toFixed(1);
+            return ` ${ctx.dataset.label}: $${val.toLocaleString()}  (${pct > 0 ? '+' : ''}${pct}%)`;
+          }
+        }
       }
     }
   }
