@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wiser Intelligence Brief — Risk Mitigator Flex</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg-primary: #0B1120;
+    --bg-secondary: #111827;
+    --bg-card: #1A2332;
+    --bg-card-hover: #1F2A3C;
+    --border: #2A3A50;
+    --gold: #C9A84C;
+    --gold-light: #E0C76E;
+    --gold-dim: rgba(201,168,76,0.15);
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --accent-green: #34D399;
+    --accent-red: #F87171;
+    --accent-blue: #60A5FA;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    padding: 80px 40px 60px;
+    text-align: center;
+    background: linear-gradient(180deg, #0B1120 0%, #111827 100%);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: var(--text-secondary);
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 32px;
+  }
+  .hero-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .hero-meta strong { color: var(--text-secondary); }
+  .hero-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 24px auto 0;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  section {
+    padding: 60px 0;
+  }
+  section + section {
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+  .section-intro {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 760px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  /* ── THESIS BLOCK ── */
+  .thesis-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, #141E2E 100%);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 36px 40px;
+    margin-bottom: 40px;
+  }
+  .thesis-block p {
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--text-secondary);
+  }
+  .thesis-block p strong {
+    color: var(--text-primary);
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    text-align: center;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .stat-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+  .stat-card .label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .stat-card .value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .stat-card .sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .stat-card.green .value { color: var(--accent-green); }
+  .stat-card.red .value { color: var(--accent-red); }
+
+  /* ── TABLES ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin-bottom: 32px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead th {
+    background: var(--bg-card);
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(42,58,80,0.5);
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+  tbody tr:hover td {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ── CHART CONTAINERS ── */
+  .chart-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  canvas { max-height: 380px; }
+
+  /* ── TWO-COL GRID ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* ── MIGRATION TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 40px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--border) 100%);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  .timeline-item:hover { border-color: var(--gold); }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 26px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--bg-primary);
+  }
+  .timeline-item .date {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .timeline-item .event-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .timeline-item .detail {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── WATERMARK / PEAK-TROUGH ── */
+  .peak-trough {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .peak-trough .mark {
+    text-align: center;
+    padding: 28px 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .peak-trough .mark.high {
+    background: linear-gradient(135deg, rgba(52,211,153,0.08), transparent);
+    border-color: rgba(52,211,153,0.3);
+  }
+  .peak-trough .mark.low {
+    background: linear-gradient(135deg, rgba(248,113,113,0.08), transparent);
+    border-color: rgba(248,113,113,0.3);
+  }
+  .mark .mark-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .mark .mark-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+  }
+  .mark.high .mark-value { color: var(--accent-green); }
+  .mark.low .mark-value { color: var(--accent-red); }
+  .mark .mark-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-btn {
+    padding: 12px 28px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .tab-btn:hover { color: var(--text-secondary); }
+  .tab-btn.active {
+    color: var(--gold);
+  }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gold);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── KEY TAKEAWAY ── */
+  .takeaway {
+    background: linear-gradient(135deg, rgba(201,168,76,0.06), transparent);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .takeaway .takeaway-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .takeaway p {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--text-secondary);
+  }
+
+  /* ── DISCLOSURE ── */
+  .disclosure {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: 60px 0 40px;
+  }
+  .disclosure-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .disclosure p, .disclosure li {
+    font-size: 11px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+  .disclosure ul {
+    list-style: none;
+    padding: 0;
+  }
+  .disclosure li {
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .disclosure li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--text-muted);
+  }
+  .disclosure p + p { margin-top: 12px; }
+  .disclosure-section + .disclosure-section { margin-top: 28px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+  }
+  footer p {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+  footer .copyright {
+    margin-top: 6px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .hero { padding: 50px 20px 40px; }
+    section { padding: 40px 0; }
+    .thesis-block { padding: 24px; }
+    .peak-trough { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════ HERO ════════════ -->
+<header class="hero">
+  <div class="hero-badge">Portfolio Intelligence</div>
+  <h1>The Wiser <span>Intelligence</span> Brief</h1>
+  <p class="hero-subtitle">Risk Mitigator Flex — Portfolio Thesis &amp; Hypothetical Backtest</p>
+  <p class="hero-meta">Prepared by <strong>Marc Becker</strong>&ensp;·&ensp;Wiser Financial, LLC&ensp;·&ensp;April 2026</p>
+  <div class="hero-divider"></div>
+</header>
+
+<main>
+
+<!-- ════════════ PORTFOLIO THESIS ════════════ -->
+<section>
+  <div class="container">
+    <p class="section-label">Portfolio Thesis</p>
+    <h2 class="section-title">Discipline at the Point of Maximum Fear</h2>
+    <div class="thesis-block">
+      <p>The <strong>Risk Mitigator Flex (RMF)</strong> strategy is built on a single conviction: <strong>the best time to own equities is when no one else wants them.</strong> Rather than holding a static allocation through a crisis, RMF enters conservatively — anchored in short-duration bonds and precious metals — then systematically migrates capital into equities at pre-defined market drawdown levels. Each step is rules-based and removes the emotional friction that causes most investors to sell at the bottom.</p>
+    </div>
+    <p class="section-intro">The following hypothetical backtest applies RMF's published migration rules to the most severe market dislocation in modern history — the Global Financial Crisis of 2007–2009 — using actual fund-level returns from DFA, Vanguard, and spot precious metals pricing. Two profiles are presented: <strong>Balanced</strong> (for clients in or near retirement) and <strong>Aggressive</strong> (for clients with a long time horizon and no income dependence).</p>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="label">Starting Capital</div>
+        <div class="value">$100,000</div>
+        <div class="sub">December 2007</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Backtest Period</div>
+        <div class="value">18 Yrs</div>
+        <div class="sub">Dec 2007 — Dec 2025</div>
+      </div>
+      <div class="stat-card green">
+        <div class="label">Balanced Return</div>
+        <div class="value">+251%</div>
+        <div class="sub">$350,600 at Dec 2025</div>
+      </div>
+      <div class="stat-card green">
+        <div class="label">Aggressive Return</div>
+        <div class="value">+405%</div>
+        <div class="sub">$505,000 at Dec 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ STARTING ALLOCATION ════════════ -->
+<section>
+  <div class="container">
+    <p class="section-label">Starting Position</p>
+    <h2 class="section-title">Initial Allocation — December 2007</h2>
+    <p class="section-intro">Both strategies deploy with identical starting weights: a defensive posture of 20% equities, 60% short-duration bonds, and 20% precious metals. The difference emerges entirely in how capital is migrated during the drawdown.</p>
+
+    <div class="chart-container">
+      <div class="chart-title">Starting Allocation — $100,000</div>
+      <canvas id="allocationChart"></canvas>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Sleeve</th><th>Weight</th><th>Value</th><th>Fund / Proxy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>U.S. Equities (9%) · Intl Dev (9%) · EM (2%)</td><td>20%</td><td>$20,000</td><td>DFQTX · DFIEX · DFCEX</td></tr>
+          <tr><td>Bonds: STIP 25% · BSV 15% · IAGG 12% · BIL 8%</td><td>60%</td><td>$60,000</td><td>STIP · BSV · IAGG · BIL</td></tr>
+          <tr><td>Gold (PHYS)</td><td>15%</td><td>$15,000</td><td>Gold Spot Price</td></tr>
+          <tr><td>Silver (PSLV)</td><td>5%</td><td>$5,000</td><td>Silver Spot Price</td></tr>
+          <tr><td>Total</td><td>100%</td><td>$100,000</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ STRATEGY TABS ════════════ -->
+<section>
+  <div class="container">
+    <p class="section-label">Strategy Deep Dive</p>
+    <h2 class="section-title">Migration Mechanics &amp; Performance</h2>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('balanced')">Balanced</button>
+      <button class="tab-btn" onclick="switchTab('aggressive')">Aggressive</button>
+      <button class="tab-btn" onclick="switchTab('compare')">Head to Head</button>
+    </div>
+
+    <!-- ── BALANCED ── -->
+    <div id="tab-balanced" class="tab-panel active">
+      <p class="section-intro" style="margin-bottom:32px">The Balanced strategy sells bonds <em>and</em> metals into equities at each migration step, ending at 48% equity / 40% bond / 12% metals. Designed for clients who need a floor on drawdown.</p>
+
+      <p class="section-label">Migration Trigger Log</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="date">December 2007 — Start</div>
+          <div class="event-title">Initial allocation deployed · S&P ~1,468</div>
+          <div class="detail">Portfolio value: $100,000</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">January 22, 2008 — Step 1</div>
+          <div class="event-title">S&P ~1,252 (−20%) · Portfolio ~$99,700</div>
+          <div class="detail">Sell 7% of bonds → equities. Equity rises from 20% to 27%.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">October 7, 2008 — Step 2</div>
+          <div class="event-title">S&P ~1,096 (−30%) · Portfolio ~$88,700</div>
+          <div class="detail">Sell bonds + metals → equities. Equity rises from 27% to 41%.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">October 24, 2008 — Step 3</div>
+          <div class="event-title">S&P ~939 (−40%) · Portfolio ~$82,200</div>
+          <div class="detail">Final migration: 48% stock / 40% bond / 10% gold / 2% silver.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">March 9, 2009 — Low Water Mark</div>
+          <div class="event-title">S&P 676 (−54%) · Portfolio ~$77,300</div>
+          <div class="detail">No action — final allocation holds. Max drawdown: −22.7%.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">May 2010 — Recovery</div>
+          <div class="event-title">S&P ~1,135 · Portfolio ~$110,800</div>
+          <div class="detail">Portfolio recovered above starting value: <strong>+10.8%</strong>.</div>
+        </div>
+      </div>
+
+      <div class="peak-trough">
+        <div class="mark high">
+          <div class="mark-label">High Water Mark</div>
+          <div class="mark-value">$100,000</div>
+          <div class="mark-sub">December 2007 · Starting Value</div>
+        </div>
+        <div class="mark low">
+          <div class="mark-label">Low Water Mark</div>
+          <div class="mark-value">$77,300</div>
+          <div class="mark-sub">March 9, 2009 · −22.7% Drawdown</div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-title">Long-Term Performance — Balanced vs. Benchmarks</div>
+        <canvas id="balancedChart"></canvas>
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-label">Key Takeaway</div>
+        <p>The RMF Balanced strategy held its drawdown to <strong>−22.7%</strong> while global equity investors (VT) lost <strong>57%</strong> peak-to-trough. It was above its starting value by May 2010 — more than 10% above — when VT investors were still down 13%. For clients in or near retirement, the −22.7% floor versus a −57% experience is the entire point of the strategy.</p>
+      </div>
+    </div>
+
+    <!-- ── AGGRESSIVE ── -->
+    <div id="tab-aggressive" class="tab-panel">
+      <p class="section-intro" style="margin-bottom:32px">The Aggressive strategy never sells metals — all three migration steps liquidate <em>bonds only</em>, ending at 80% equity / 20% metals / 0% bonds. Designed for clients with a long runway and no income dependence.</p>
+
+      <p class="section-label">Migration Trigger Log</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="date">December 2007 — Start</div>
+          <div class="event-title">Initial allocation deployed · S&P ~1,468</div>
+          <div class="detail">Portfolio value: $100,000</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">January 22, 2008 — Step 1</div>
+          <div class="event-title">S&P ~1,252 (−20%) · Portfolio ~$99,700</div>
+          <div class="detail">Sell 25% of each bond fund → equities. Equity rises from 20% to 32%.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">October 7, 2008 — Step 2</div>
+          <div class="event-title">S&P ~1,096 (−30%) · Portfolio ~$83,300</div>
+          <div class="detail">Sell 66.7% of remaining bonds → equities. Equity rises from 32% to 63%.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">October 24, 2008 — Step 3</div>
+          <div class="event-title">S&P ~939 (−40%) · Portfolio ~$73,500</div>
+          <div class="detail">Sell all remaining bonds → equities. Final: 80% stock / 20% metals / 0% bonds.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">March 9, 2009 — Low Water Mark</div>
+          <div class="event-title">S&P 676 (−54%) · Portfolio ~$65,300</div>
+          <div class="detail">No action — final allocation holds. Max drawdown: −34.7%.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="date">May 2010 — Recovery</div>
+          <div class="event-title">S&P ~1,135 · Portfolio ~$122,400</div>
+          <div class="detail">Portfolio recovered well above starting value: <strong>+22.4%</strong>.</div>
+        </div>
+      </div>
+
+      <div class="peak-trough">
+        <div class="mark high">
+          <div class="mark-label">High Water Mark</div>
+          <div class="mark-value">$100,000</div>
+          <div class="mark-sub">December 2007 · Starting Value</div>
+        </div>
+        <div class="mark low">
+          <div class="mark-label">Low Water Mark</div>
+          <div class="mark-value">$65,300</div>
+          <div class="mark-sub">March 9, 2009 · −34.7% Drawdown</div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-title">Long-Term Performance — Aggressive vs. Benchmarks</div>
+        <canvas id="aggressiveChart"></canvas>
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-label">Key Takeaway</div>
+        <p>The Aggressive strategy outperforms Balanced on every return horizon, including a $11,600 edge at May 2010 from heavier equity exposure purchased near the trough — supercharged by DFA Emerging Markets returning +83.6% in 2009 alone. Through Dec 2025 it leads VT (<strong>+405% vs +257%</strong>) with the critical distinction that all equity was acquired at a 40%+ discount to the prior peak.</p>
+      </div>
+    </div>
+
+    <!-- ── HEAD TO HEAD ── -->
+    <div id="tab-compare" class="tab-panel">
+      <p class="section-intro" style="margin-bottom:32px">A direct comparison of the two RMF profiles across every measured dimension — from capital protection to long-term growth.</p>
+
+      <div class="chart-container">
+        <div class="chart-title">Cumulative Return Through Dec 2025</div>
+        <canvas id="compareChart"></canvas>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>Balanced</th><th>Aggressive</th><th>Edge</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Max Drawdown</td><td>−22.7%</td><td>−34.7%</td><td style="color:var(--accent-green)">Balanced</td></tr>
+            <tr><td>May 2010 Value</td><td>$110,800 (+10.8%)</td><td>$122,400 (+22.4%)</td><td style="color:var(--accent-blue)">Aggressive</td></tr>
+            <tr><td>3-Year Return</td><td>+19.0%</td><td>+35.7%</td><td style="color:var(--accent-blue)">Aggressive</td></tr>
+            <tr><td>5-Year Return</td><td>+29.0%</td><td>+49.1%</td><td style="color:var(--accent-blue)">Aggressive</td></tr>
+            <tr><td>10-Year Return</td><td>+80.0%</td><td>+125.9%</td><td style="color:var(--accent-blue)">Aggressive</td></tr>
+            <tr><td>Dec 2025 Return (~18 Yr)</td><td>+251%</td><td>+405%</td><td style="color:var(--accent-blue)">Aggressive</td></tr>
+            <tr><td>Final Bond Exposure</td><td>40%</td><td>0%</td><td>—</td></tr>
+            <tr><td>Final Metals Sleeve</td><td>12%</td><td>~20%</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-label">The Right Fit</div>
+        <p><strong>Balanced</strong> is built for the client who needs to sleep at night during a crisis — a −22.7% floor vs. −57% for a global equity portfolio. <strong>Aggressive</strong> is built for the client with decades ahead and the conviction to hold through a deeper trough for a substantially larger payoff. Both strategies share the same structural advantage: they buy equities at the worst possible moment for the market, which is the best possible moment for the investor.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<!-- ════════════ DISCLOSURES ════════════ -->
+<div class="disclosure">
+  <div class="container">
+
+    <div class="disclosure-section">
+      <div class="disclosure-title">Important Disclosures</div>
+      <p>This document is for informational purposes only and does not constitute investment advice, a solicitation, or an offer to buy or sell any securities or investment products. The information contained herein is not intended to provide, and should not be relied upon for, accounting, legal, or tax advice. Investors should consult with their own financial advisor, tax professional, and legal counsel before making any investment decisions.</p>
+      <p>Past performance is not indicative of future results. All investment strategies involve risk, including the possible loss of principal. There can be no assurance that any investment strategy will achieve its objectives, generate profits, or avoid losses.</p>
+    </div>
+
+    <div class="disclosure-section">
+      <div class="disclosure-title">Hypothetical Performance Disclosure</div>
+      <p>The performance results presented in this document are hypothetical and based on backtested data. <strong>Hypothetical performance results have many inherent limitations, some of which are described below.</strong> No representation is being made that any account will or is likely to achieve profits or losses similar to those shown. In fact, there are frequently sharp differences between hypothetical performance results and the actual results subsequently achieved by any particular investment strategy.</p>
+      <p>One of the limitations of hypothetical performance results is that they are generally prepared with the benefit of hindsight. In addition, hypothetical trading does not involve financial risk, and no hypothetical trading record can completely account for the impact of financial risk in actual trading. For example, the ability to withstand losses or to adhere to a particular trading program in spite of trading losses are material points which can also adversely affect actual trading results. There are numerous other factors related to the markets in general or to the implementation of any specific trading program which cannot be fully accounted for in the preparation of hypothetical performance results, all of which can adversely affect actual trading results.</p>
+    </div>
+
+    <div class="disclosure-section">
+      <div class="disclosure-title">Data Sources &amp; Methodology</div>
+      <ul>
+        <li><strong>Equity Returns:</strong> DFQTX (DFA US Core Equity 2 I, actual fund data 2005–present, proxy for DFAC). DFIEX (DFA Intl Core Equity 2 I, actual). DFCEX (DFA Emerging Markets Core Equity I, actual).</li>
+        <li><strong>Bond Returns:</strong> BSV (Vanguard Short-Term Bond ETF, actual, proxy for DFSD). STIP actual from 2011; Bloomberg 0–5yr TIPS index estimate used for 2008–2010. IAGG actual from 2016; Bloomberg Global Agg ex-USD hedged index estimate used for 2008–2015. BIL (SPDR 1–3 Month T-Bill ETF, actual).</li>
+        <li><strong>Metals:</strong> Gold and silver spot prices.</li>
+        <li><strong>Benchmarks:</strong> VT benchmark uses MSCI ACWI for Dec 2007 start (VT launched June 2008). VBIAX (Vanguard Balanced Index Fund Admiral Shares).</li>
+        <li>Dec 2025 values reflect actual fund returns through 12/31/2025. RMF values assume final post-migration allocation held without rebalancing from October 2008 through December 2025.</li>
+        <li>RMF migration triggers based on confirmed S&P 500 price levels per published Wiser Financial strategy rules. Steps 2 and 3 triggered within 17 days during the October 2008 acute phase of the financial crisis.</li>
+      </ul>
+    </div>
+
+    <div class="disclosure-section">
+      <div class="disclosure-title">Regulatory Notice</div>
+      <p>Wiser Financial, LLC is a registered investment adviser. Registration does not imply a certain level of skill or training. Information presented is believed to be factual and up-to-date, but we do not guarantee its accuracy and it should not be regarded as a complete analysis of the subjects discussed. All expressions of opinion reflect the judgment of the author as of the date of publication and are subject to change. This material is distributed for informational purposes only and should not be considered as investment advice or a recommendation of any particular security, strategy, or investment product.</p>
+      <p>Portfolio inception date: May 1, 2025.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  <div class="container">
+    <p>The Wiser Intelligence Brief&ensp;·&ensp;Wiser Financial, LLC</p>
+    <p class="copyright">&copy; 2025–2026 Marc Becker / Wiser Financial, LLC. All rights reserved. Reproduction or redistribution without written permission is prohibited.</p>
+  </div>
+</footer>
+
+<!-- ════════════ CHARTS ════════════ -->
+<script>
+const chartFont = { family: "'Inter', sans-serif" };
+const gridColor = 'rgba(42,58,80,0.5)';
+const tickColor = '#64748B';
+
+Chart.defaults.font.family = chartFont.family;
+Chart.defaults.color = tickColor;
+
+// ── Starting Allocation Doughnut ──
+new Chart(document.getElementById('allocationChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['U.S. Equities (9%)', 'Intl Developed (9%)', 'Emerging Markets (2%)', 'STIP (25%)', 'BSV/DFSD (15%)', 'IAGG (12%)', 'BIL (8%)', 'Gold (15%)', 'Silver (5%)'],
+    datasets: [{
+      data: [9, 9, 2, 25, 15, 12, 8, 15, 5],
+      backgroundColor: [
+        '#60A5FA', '#3B82F6', '#2563EB',
+        '#94A3B8', '#78909C', '#607D8B', '#546E7A',
+        '#C9A84C', '#A68A3A'
+      ],
+      borderColor: '#0B1120',
+      borderWidth: 2,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '55%',
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: { padding: 12, usePointStyle: true, pointStyle: 'rectRounded', font: { size: 11 } }
+      },
+      tooltip: {
+        backgroundColor: '#1A2332',
+        borderColor: '#2A3A50',
+        borderWidth: 1,
+        titleFont: { weight: '600' },
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.parsed}%  ·  $${(ctx.parsed * 1000).toLocaleString()}`
+        }
+      }
+    }
+  }
+});
+
+// ── Balanced Performance Bar Chart ──
+new Chart(document.getElementById('balancedChart'), {
+  type: 'bar',
+  data: {
+    labels: ['3-Year\n(Dec 2010)', '5-Year\n(Dec 2012)', '10-Year\n(Dec 2017)', '~18-Year\n(Dec 2025)'],
+    datasets: [
+      {
+        label: 'RMF Balanced',
+        data: [19.0, 29.0, 80.0, 251],
+        backgroundColor: 'rgba(201,168,76,0.85)',
+        borderColor: '#C9A84C',
+        borderWidth: 1,
+        borderRadius: 3
+      },
+      {
+        label: 'Vanguard 60/40',
+        data: [5.2, 24.1, 95.7, 262],
+        backgroundColor: 'rgba(96,165,250,0.7)',
+        borderColor: '#60A5FA',
+        borderWidth: 1,
+        borderRadius: 3
+      },
+      {
+        label: 'Vanguard Total World (VT)',
+        data: [-13.3, -6.1, 58.7, 257],
+        backgroundColor: 'rgba(148,163,184,0.5)',
+        borderColor: '#94A3B8',
+        borderWidth: 1,
+        borderRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: {
+        grid: { color: gridColor },
+        ticks: { callback: v => v + '%', font: { size: 11 } }
+      }
+    },
+    plugins: {
+      legend: { labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 16, font: { size: 11 } } },
+      tooltip: {
+        backgroundColor: '#1A2332', borderColor: '#2A3A50', borderWidth: 1,
+        callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y > 0 ? '+' : ''}${ctx.parsed.y}%` }
+      }
+    }
+  }
+});
+
+// ── Aggressive Performance Bar Chart ──
+new Chart(document.getElementById('aggressiveChart'), {
+  type: 'bar',
+  data: {
+    labels: ['3-Year\n(Dec 2010)', '5-Year\n(Dec 2012)', '10-Year\n(Dec 2017)', '~18-Year\n(Dec 2025)'],
+    datasets: [
+      {
+        label: 'RMF Aggressive',
+        data: [35.7, 49.1, 125.9, 405],
+        backgroundColor: 'rgba(201,168,76,0.85)',
+        borderColor: '#C9A84C',
+        borderWidth: 1,
+        borderRadius: 3
+      },
+      {
+        label: 'Vanguard 60/40',
+        data: [5.2, 24.1, 95.7, 262],
+        backgroundColor: 'rgba(96,165,250,0.7)',
+        borderColor: '#60A5FA',
+        borderWidth: 1,
+        borderRadius: 3
+      },
+      {
+        label: 'Vanguard Total World (VT)',
+        data: [-13.3, -6.1, 58.7, 257],
+        backgroundColor: 'rgba(148,163,184,0.5)',
+        borderColor: '#94A3B8',
+        borderWidth: 1,
+        borderRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: {
+        grid: { color: gridColor },
+        ticks: { callback: v => v + '%', font: { size: 11 } }
+      }
+    },
+    plugins: {
+      legend: { labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 16, font: { size: 11 } } },
+      tooltip: {
+        backgroundColor: '#1A2332', borderColor: '#2A3A50', borderWidth: 1,
+        callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y > 0 ? '+' : ''}${ctx.parsed.y}%` }
+      }
+    }
+  }
+});
+
+// ── Head-to-Head Comparison Chart ──
+new Chart(document.getElementById('compareChart'), {
+  type: 'bar',
+  data: {
+    labels: ['May 2010', '3-Year', '5-Year', '10-Year', '~18-Year (Dec 2025)'],
+    datasets: [
+      {
+        label: 'RMF Balanced',
+        data: [10.8, 19.0, 29.0, 80.0, 251],
+        backgroundColor: 'rgba(201,168,76,0.8)',
+        borderColor: '#C9A84C',
+        borderWidth: 1,
+        borderRadius: 3
+      },
+      {
+        label: 'RMF Aggressive',
+        data: [22.4, 35.7, 49.1, 125.9, 405],
+        backgroundColor: 'rgba(52,211,153,0.7)',
+        borderColor: '#34D399',
+        borderWidth: 1,
+        borderRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: {
+        grid: { color: gridColor },
+        ticks: { callback: v => v + '%', font: { size: 11 } }
+      }
+    },
+    plugins: {
+      legend: { labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 16, font: { size: 11 } } },
+      tooltip: {
+        backgroundColor: '#1A2332', borderColor: '#2A3A50', borderWidth: 1,
+        callbacks: { label: ctx => ` ${ctx.dataset.label}: +${ctx.parsed.y}%` }
+      }
+    }
+  }
+});
+
+// ── Tab Switching ──
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
